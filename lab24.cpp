@@ -2,6 +2,7 @@
 #include<cmath>
 using namespace std;
 
+
 class ComplexNumber{				
 	public:
 		double real;
@@ -14,6 +15,7 @@ class ComplexNumber{
 		bool operator==(const ComplexNumber &);
 		double abs();
 		double angle();
+		friend ostream & operator<<(ostream &,const ComplexNumber &);
 };
 
 ComplexNumber::ComplexNumber(double x = 0,double y = 0){
@@ -28,8 +30,60 @@ ComplexNumber ComplexNumber::operator-(const ComplexNumber &c){
 	return ComplexNumber(real-c.real,imag-c.imag);
 }
 
-//Write your code here
 
+//Write your code here
+ostream & operator<<(ostream &os, const ComplexNumber &c){
+	
+	if(c.imag==0) return os<<c.real;
+	else if(c.real==0) return os<<c.imag << "i";
+	else if(c.imag<0) return os<<c.real<<"-"<< (c.imag*-1) << "i";
+	else return os<<c.real<<"+"<< c.imag << "i";
+}
+ComplexNumber operator+(double s,const ComplexNumber &c){
+	return ComplexNumber(s+c.real,c.imag);
+}
+ComplexNumber operator-(double s,const ComplexNumber &c){
+	return ComplexNumber(s-c.real,0-c.imag);
+}
+ComplexNumber ComplexNumber::operator*(const ComplexNumber &c){
+	double r=(real*c.real)-(imag*c.imag);
+	double i=(real*c.imag)+(imag*c.real);
+	return ComplexNumber(r,i);
+}
+ComplexNumber operator*(double s,const ComplexNumber &c){
+	return ComplexNumber(s*c.real,s*c.imag);
+}
+
+ComplexNumber ComplexNumber::operator/(const ComplexNumber &c){
+	double r=((real*c.real)+(imag*c.imag))/((c.real*c.real)+(c.imag*c.imag));
+	double i=((imag*c.real)-(real*c.imag))/((c.real*c.real)+(c.imag*c.imag));
+	return ComplexNumber(r,i);
+}
+ComplexNumber operator/(double s,const ComplexNumber &c){
+	double r=(s*c.real)/((c.real*c.real)+(c.imag*c.imag));
+	double i=(-1*s*c.imag)/((c.real*c.real)+(c.imag*c.imag));
+	return ComplexNumber(r,i);
+}
+double ComplexNumber::abs(){
+	double ans=sqrt(pow(real,2)+pow(imag,2));
+	return ans;
+}
+double ComplexNumber::angle(){
+	double x, y, result;
+  x = real;
+  y = imag;
+  result = atan2 (y,x) * 180 / M_PI;
+  return result;
+}
+
+bool operator==(double s,const ComplexNumber &c){
+	if(c.real==s && c.imag==0)return 1;
+	else return 0;
+}
+bool ComplexNumber::operator==(const ComplexNumber &c){
+	if(real==c.real && imag==c.imag)return 1;
+	else return 0;
+} 
 int main(){
 	ComplexNumber a(1.5,2),b(3.2,-2.5),c(-1,1.2);	
 	cout << a << "\n";
@@ -70,8 +124,3 @@ int main(){
 	cout << (ComplexNumber(1,1) == 1) << "\n";
 	cout << (0 == ComplexNumber()) << "\n";
 }
-
-
-
-
-
